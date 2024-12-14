@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     next();
   });
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_ATLAS_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log('MongoDB connection error:', err));
 
@@ -34,27 +34,39 @@ const User = require('./models/user');
 app.post('/submit', async (req, res) => {
   try {
  
-    const { fullname, email, number, collection, textarea   } = req.body;
+    const { fullname, email, number, select, textarea   } = req.body;
     
-    if (!fullname || !email || !number || !collection || !textarea) {
-      return res.status(400).send('All fields are required');
-  }
+    //if (!fullname || !email || !number || !select || !textarea) {
+    //  return res.status(400).send('All fields are required');
+    console.log('Request Body:', req.body);
+    if (!['option1', 'option2', 'option3', 'option4', 'option5'].includes(select)) {
+      console.log('OPTION IS NOT WORKING')
+
+      return res.status(400).json({ error: 'Invalid value for select.' });
+
+    }
     // Create a new user object
     const newUser = new User({  fullname,
       email,
       number,
-      collection,
+      select,
       textarea });
 
+      
     // Save the user to the database
     await newUser.save();
+    console.log('user don save')
 
     console.log('New login:', newUser);
     res.send('User data submitted successfully!');
-  } catch (err) {
-    console.error('Error saving user:', err);
+    mongoose.connection.close();
+
+  } catch (error) {
+    console.error('Error saving user:', error.message);
     res.status(500).send('Error submitting user data.');
   }
+  mongoose.connection.close();
+
 });
 
 
@@ -72,7 +84,7 @@ const server = app.listen(port, () => {
   // Handle server errors
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-        console.error('Port 3300 is already in use. Please use a different port.');
+        console.error(`${port}  is already in use by ME!`);
         process.exit(1);
     }
   });

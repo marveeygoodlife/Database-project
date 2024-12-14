@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Javascript is active')
     const form = document.getElementById('myForm');
 form.addEventListener('submit', (event) => {
 event.preventDefault(); //prevent form submittion
@@ -7,7 +8,7 @@ const fullname = document.getElementById('fullname').value.trim();
 const email = document.getElementById('email').value.trim();
 const number = document.getElementById('number').value.trim();
 const textarea = document.getElementById('textarea').value.trim();
-const select = document.getElementById('collection').value.trim();
+const select = document.getElementById('select').value.trim();
 email.toLowerCase();
 // validation for empty input
 if(!fullname){
