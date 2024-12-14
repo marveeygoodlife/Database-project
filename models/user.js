@@ -8,7 +8,7 @@ fullname: {
 
 email: {
   type:String,
-  rewuired:true,
+  required:true,
 },
 
 number: {
@@ -16,7 +16,7 @@ number: {
   required:true
 },
 
-collection: {
+selectoption: {
   type:String,
   required:true
 },

@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     next();
   });
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_ATLAS_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log('MongoDB connection error:', err));
 
@@ -34,16 +34,16 @@ const User = require('./models/user');
 app.post('/submit', async (req, res) => {
   try {
  
-    const { fullname, email, number, collection, textarea   } = req.body;
+    const { fullname, email, number, selectoption, textarea   } = req.body;
     
-    if (!fullname || !email || !number || !collection || !textarea) {
+    if (!fullname || !email || !number || !selectoption || !textarea) {
       return res.status(400).send('All fields are required');
   }
     // Create a new user object
     const newUser = new User({  fullname,
       email,
       number,
-      collection,
+      selectoption,
       textarea });
 
     // Save the user to the database
@@ -72,7 +72,7 @@ const server = app.listen(port, () => {
   // Handle server errors
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-        console.error('Port 3300 is already in use. Please use a different port.');
+        console.error(`${port}  is already in use. Please use a different port.`);
         process.exit(1);
     }
   });
